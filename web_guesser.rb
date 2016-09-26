@@ -7,11 +7,14 @@ set :secret_number, SECRET_NUMBER
 get '/' do
   guess = params["guess"].to_i
   phrase = check_guess(guess)
-  erb :index, :locals => {:phrase => phrase}
+  color = check_color(phrase)
+  erb :index, :locals => {:phrase => phrase, :color => color}
 end
 
 def check_guess(guess)
-  if guess > SECRET_NUMBER
+  if guess == 0
+    ""
+  elsif guess > SECRET_NUMBER
     high(guess)
   elsif guess < SECRET_NUMBER
     low(guess)
@@ -33,5 +36,17 @@ def low(guess)
     "Way too low!"
   else
     "Too low!"
+  end
+end
+
+def check_color(phrase)
+  if phrase == ""
+    "white"
+  elsif phrase == "Way too high!" || phrase == "Way too low!"
+    "red"
+  elsif phrase == "Too high!" || phrase == "Too low!"
+    "pink"
+  else
+    "green"
   end
 end
